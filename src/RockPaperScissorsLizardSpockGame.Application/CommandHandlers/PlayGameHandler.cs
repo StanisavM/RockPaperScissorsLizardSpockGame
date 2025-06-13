@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using MediatR;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using RockPaperScissorsLizardSpockGame.Application.Commands;
 using RockPaperScissorsLizardSpockGame.Application.DTOs;
@@ -19,9 +18,10 @@ public class PlayGameHandler(IRandomNumberService randomNumberService, ILogger<P
 
         // Get all possible moves and select the computer's move based on random number
         var moves = Enum.GetValues<GameMove>();
-        var computerMove = moves[(randomNumber - 1) % moves.Length];
+        var index = Math.Abs((randomNumber - 1) % moves.Length);
+        var computerMove = moves[index];
 
-        logger.LogInformation("Computer selected move: {ComputerMove}", computerMove);
+        logger.LogInformation("Raw random number: {RandomNumber}, Computed index: {Index}, Computer selected move: {ComputerMove}",randomNumber, index, computerMove);
 
         var result = DetermineWinner(request.PlayerMove, computerMove);
         logger.LogInformation("Game result determined: {Result} (Player: {PlayerMove}, Computer: {ComputerMove})", result, request.PlayerMove, computerMove);
