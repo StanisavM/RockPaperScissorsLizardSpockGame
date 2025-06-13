@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<WarningsAsErrors>nullable</WarningsAsErrors>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <UserSecretsId>b30c2e32-4c3a-4b04-8130-99d81e9439d6</UserSecretsId>
+	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	  <DockerfileContext>..\..</DockerfileContext>
+	  <Dockerfile>..\..\Dockerfile</Dockerfile>
+	  <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1-Preview.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RockPaperScissorsLizardSpockGame.Application\RockPaperScissorsLizardSpockGame.Application.csproj" />
+    <ProjectReference Include="..\RockPaperScissorsLizardSpockGame.Infrastructure\RockPaperScissorsLizardSpockGame.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  rockpaperscissorslizardspockgame.api:
+    image: ${DOCKER_REGISTRY-}rockpaperscissorslizardspockgameapi
+    build:
+      context: .
+      dockerfile: src/RockPaperScissorsLizardSpockGame.Api/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
