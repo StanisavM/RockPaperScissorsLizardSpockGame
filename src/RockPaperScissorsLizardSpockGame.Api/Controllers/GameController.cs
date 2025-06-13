@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RockPaperScissorsLizardSpockGame.Api.DTOs;
 using RockPaperScissorsLizardSpockGame.Application.DTOs;
 using RockPaperScissorsLizardSpockGame.Application.Interfaces;
@@ -44,6 +43,7 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         /// <response code="200">Returns the random game move selected.</response>
         [HttpGet("choice")]
         [ProducesResponseType(typeof(GameChoiceDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<IActionResult> GetRandomChoice(CancellationToken ct = default)
         {
             _logger.LogInformation("Request received: Getting random game choice.");
@@ -63,7 +63,9 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         [HttpPost("play")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(PlayGameResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status503ServiceUnavailable)]
         public async Task<IActionResult> Play([FromBody] PlayGameRequest request, CancellationToken ct = default)
         {
             _logger.LogInformation("Received play request with player move ID: {PlayerMove}", request.Player);

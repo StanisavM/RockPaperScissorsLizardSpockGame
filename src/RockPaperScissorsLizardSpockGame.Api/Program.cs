@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using RockPaperScissorsLizardSpockGame.Api.Middlewares;
 using RockPaperScissorsLizardSpockGame.Application.Commands;
 using RockPaperScissorsLizardSpockGame.Application.Interfaces;
 using RockPaperScissorsLizardSpockGame.Application.Queries;
@@ -57,6 +58,7 @@ try
     }
 
     app.UseHttpsRedirection();
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
     app.UseAuthorization();
     app.MapControllers();
 
