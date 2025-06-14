@@ -26,8 +26,12 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         var (statusCode, message) = rootEx switch
         {
             ArgumentException => ((int)HttpStatusCode.BadRequest, rootEx.Message),
-            HttpRequestException => ((int)HttpStatusCode.ServiceUnavailable, "We're unable to connect to a required external service. Please try again shortly."),
-            _ => ((int)HttpStatusCode.InternalServerError, "Something went wrong. Please contact support if the problem persists.")
+            HttpRequestException => ((int)HttpStatusCode.ServiceUnavailable,
+                "We're unable to connect to a required external service. Please try again shortly."),
+            LiteDB.LiteException => ((int)HttpStatusCode.InternalServerError,
+                "A database error occurred while processing your request. Please try again later."),
+            _ => ((int)HttpStatusCode.InternalServerError,
+                "Something went wrong. Please contact support if the problem persists.")
         };
 
         response.StatusCode = statusCode;

@@ -11,7 +11,7 @@ namespace RockPaperScissorsLizardSpockGame.Application.Services;
 public class GameService(IMediator mediator) : IGameService
 {
     private readonly IMediator _mediator = mediator;
-    public async Task<Result<PlayGameResponse>> PlayGame(int playerChoiceId, CancellationToken ct) => await _mediator.Send(new PlayGameCommand((GameMove)playerChoiceId), ct);
+    public async Task<Result<PlayGameResponse>> PlayGame(int playerChoiceId, CancellationToken ct, string? email = null) => await _mediator.Send(new PlayGameCommand((GameMove)playerChoiceId, email), ct);
 
     public async Task<List<GameChoiceDto>> GetGameChoices(CancellationToken ct) => await _mediator.Send(new GetChoicesQuery(), ct);
 
