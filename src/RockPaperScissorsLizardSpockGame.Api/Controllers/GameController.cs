@@ -5,6 +5,10 @@ using RockPaperScissorsLizardSpockGame.Application.Interfaces;
 
 namespace RockPaperScissorsLizardSpockGame.Api.Controllers
 {
+    /// <summary>
+    /// API controller for managing Rock-Paper-Scissors-Lizard-Spock game operations,
+    /// including retrieving choices, playing rounds, and handling the scoreboard.
+    /// </summary>
     [ApiController]
     [Route("")]
     public class GameController : ControllerBase
@@ -13,6 +17,12 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         private readonly IGameService _gameService;
         private readonly IScoreboardService _scoreboardService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance for logging controller operations.</param>
+        /// <param name="gameService">Service for handling game logic and operations.</param>
+        /// <param name="scoreboardService">Service for managing scoreboard data and operations.</param>
         public GameController(ILogger<GameController> logger, IGameService gameService, IScoreboardService scoreboardService)
         {
             _logger = logger;
@@ -90,6 +100,7 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         /// Retrieves the 10 most recent game results for the specified user if email is provided, or 10 most recent global game results if email is not provided.
         /// </summary>
         /// <param name="email">The email address used to identify the user.</param>
+        /// <param name="ct"></param>
         /// <returns>A JSON array containing up to 10 of the most recent game results.</returns>
         /// <response code="200">Returns the list of recent game results for the user if email provided, or global scoreboard.</response>
         /// <response code="500">Returned if there is an unexpected error accessing the scoreboard data.</response>
@@ -99,7 +110,7 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetScoreboard([FromQuery] string? email = null, CancellationToken ct = default)
         {
-            var scores = await _scoreboardService.GetRecentEntries(email);
+            var scores = await _scoreboardService.GetRecentEntries(email, ct:ct);
             return Ok(scores.Select(s => new ScoreEntryDto(s.PlayerEmail, s.PlayerMove, s.ComputerMove, s.Result, s.PlayedAt)));
         }
 
@@ -107,6 +118,7 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         /// Resets the scoreboard for the specified user by deleting all saved game results.
         /// </summary>
         /// <param name="email">The email address used to identify the user whose scoreboard should be cleared.</param>
+        /// <param name="ct"></param>
         /// <returns>A confirmation message indicating the scoreboard has been reset.</returns>
         /// <response code="200">Indicates the scoreboard was successfully reset.</response>
         /// <response code="400">Returned if the email is null, empty, or invalid.</response>

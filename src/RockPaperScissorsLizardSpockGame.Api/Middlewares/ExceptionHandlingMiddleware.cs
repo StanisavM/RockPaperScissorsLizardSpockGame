@@ -1,10 +1,20 @@
 ﻿using System.Net;
 using System.Text.Json;
-
 namespace RockPaperScissorsLizardSpockGame.Api.Middlewares;
 
+/// <summary>
+/// Middleware that handles unhandled exceptions during HTTP request processing
+/// and returns standardized JSON error responses.
+/// </summary>
+/// <param name="next">The next middleware in the request pipeline.</param>
+/// <param name="logger">The logger used to log exception details.</param>
 public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
 {
+    /// <summary>
+    /// Processes an HTTP request, handling any unhandled exceptions and formatting error responses.
+    /// </summary>
+    /// <param name="context">The HTTP context for the current request.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task Invoke(HttpContext context)
     {
         try
