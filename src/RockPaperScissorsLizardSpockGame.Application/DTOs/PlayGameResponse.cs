@@ -2,4 +2,4 @@
 
 namespace RockPaperScissorsLizardSpockGame.Application.DTOs;
 
-public record PlayGameResponse(GameMove Player, GameMove Computer, string Results);
+public record PlayGameResponse(GameMove Player, GameMove Computer, string Results, string? FunFact = null);

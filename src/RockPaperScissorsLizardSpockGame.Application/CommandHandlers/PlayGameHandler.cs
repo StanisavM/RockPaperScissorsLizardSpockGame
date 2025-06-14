@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using RockPaperScissorsLizardSpockGame.Application.Commands;
 using RockPaperScissorsLizardSpockGame.Application.DTOs;
+using RockPaperScissorsLizardSpockGame.Application.Helpers;
 using RockPaperScissorsLizardSpockGame.Application.Interfaces;
 using RockPaperScissorsLizardSpockGame.Domain.Models;
 using RPSLSGame.Domain.Models;
@@ -26,7 +27,7 @@ public class PlayGameHandler(IRandomNumberService randomNumberService, ILogger<P
         var result = DetermineWinner(request.PlayerMove, computerMove);
         logger.LogInformation("Game result determined: {Result} (Player: {PlayerMove}, Computer: {ComputerMove})", result, request.PlayerMove, computerMove);
 
-        var gameResult = new PlayGameResponse(request.PlayerMove, computerMove, result.ToString().ToLower());
+        var gameResult = new PlayGameResponse(request.PlayerMove, computerMove, result.ToString().ToLower(), PlayGameResponseHelpers.GetRandomFunFact());
 
         return Result.Success(gameResult);
     }

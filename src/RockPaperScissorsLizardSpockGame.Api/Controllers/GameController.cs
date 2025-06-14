@@ -54,6 +54,7 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
 
         /// <summary>
         /// Plays a round of the game using the player's chosen move and returns the result.
+        /// PlayGameResponse includes players moves, results, as well as random FunFact for this game.
         /// </summary>
         /// <param name="request">An object containing the player's selected move.</param>
         /// <param name="ct">Cancellation token to cancel the request if needed.</param>
