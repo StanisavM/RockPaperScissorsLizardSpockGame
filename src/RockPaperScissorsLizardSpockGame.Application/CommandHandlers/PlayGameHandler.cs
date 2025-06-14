@@ -9,7 +9,7 @@ using RockPaperScissorsLizardSpockGame.Domain.Models;
 using RPSLSGame.Domain.Models;
 
 namespace RockPaperScissorsLizardSpockGame.Application.CommandHandlers;
-public class PlayGameHandler(IRandomNumberService randomNumberService, ILogger<PlayGameHandler> logger) : IRequestHandler<PlayGameCommand, Result<PlayGameResponse>>
+public class PlayGameHandler(IRandomNumberService randomNumberService, ILogger<PlayGameHandler> logger, IScoreboardService scoreboardService) : IRequestHandler<PlayGameCommand, Result<PlayGameResponse>>
 {
     public async Task<Result<PlayGameResponse>> Handle(PlayGameCommand request, CancellationToken ct)
     {
@@ -22,13 +22,26 @@ public class PlayGameHandler(IRandomNumberService randomNumberService, ILogger<P
         var index = Math.Abs((randomNumber - 1) % moves.Length);
         var computerMove = moves[index];
 
-        logger.LogInformation("Raw random number: {RandomNumber}, Computed index: {Index}, Computer selected move: {ComputerMove}",randomNumber, index, computerMove);
+        logger.LogInformation("Raw random number: {RandomNumber}, Computed index: {Index}, Computer selected move: {ComputerMove}", randomNumber, index, computerMove);
 
         var result = DetermineWinner(request.PlayerMove, computerMove);
         logger.LogInformation("Game result determined: {Result} (Player: {PlayerMove}, Computer: {ComputerMove})", result, request.PlayerMove, computerMove);
 
         var gameResult = new PlayGameResponse(request.PlayerMove, computerMove, result.ToString().ToLower(), PlayGameResponseHelpers.GetRandomFunFact());
 
+        if (!string.IsNullOrEmpty(request.Email))
+        {
+            await scoreboardService.AddEntryAsync(
+                new ScoreEntry
+                {
+                    PlayerEmail = request.Email,
+                    PlayerMove = request.PlayerMove,
+                    ComputerMove = computerMove,
+                    PlayedAt = DateTime.Now,
+                    Result = result.ToString().ToLower()
+                });
+
+        }
         return Result.Success(gameResult);
     }
 

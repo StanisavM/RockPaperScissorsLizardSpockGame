@@ -5,6 +5,7 @@ using RockPaperScissorsLizardSpockGame.Application.Interfaces;
 using RockPaperScissorsLizardSpockGame.Application.Queries;
 using RockPaperScissorsLizardSpockGame.Application.Services;
 using RockPaperScissorsLizardSpockGame.Infrastructure.Extensions;
+using RockPaperScissorsLizardSpockGame.Infrastructure.Services;
 using Serilog;
 using System.Reflection;
 
@@ -40,6 +41,7 @@ try
         });
     });
     builder.Services.AddHttpClient<IRandomNumberService, RandomNumberService>();
+    builder.Services.AddScoped<IScoreboardService, LiteDBScoreboardService>();
     builder.Services.AddMediatR(cfg =>
     {
         cfg.RegisterServicesFromAssembly(typeof(GetChoicesQuery).Assembly);

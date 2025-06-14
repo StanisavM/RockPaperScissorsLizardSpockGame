@@ -11,11 +11,13 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
     {
         private readonly ILogger<GameController> _logger;
         private readonly IGameService _gameService;
+        private readonly IScoreboardService _scoreboardService;
 
-        public GameController(ILogger<GameController> logger, IGameService gameService)
+        public GameController(ILogger<GameController> logger, IGameService gameService, IScoreboardService scoreboardService)
         {
             _logger = logger;
             _gameService = gameService;
+            _scoreboardService = scoreboardService;
         }
 
         /// <summary>
@@ -69,19 +71,55 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status503ServiceUnavailable)]
         public async Task<IActionResult> Play([FromBody] PlayGameRequest request, CancellationToken ct = default)
         {
-            _logger.LogInformation("Received play request with player move ID: {PlayerMove}", request.Player);
+            _logger.LogInformation("Received play request with player moveId: {PlayerMove} and email: {Email}", request.Player, request.Email);
 
-            var playResult = await _gameService.PlayGame(request.Player, ct);
+            var playResult = await _gameService.PlayGame(request.Player, ct, request.Email);
 
             if (playResult.IsSuccess)
             {
-                _logger.LogInformation("Round played successfully: Player {PlayerMove}, Computer {ComputerMove}, Outcome {Result}",
-                    playResult.Value.Player, playResult.Value.Computer, playResult.Value.Results);
+                _logger.LogInformation("Round played successfully: Player {PlayerMove}, Email:{Email}, Computer {ComputerMove}, Outcome {Result}",
+                    playResult.Value.Player, request.Email, playResult.Value.Computer, playResult.Value.Results);
                 return Ok(playResult.Value);
             }
 
             _logger.LogWarning("Play game request failed: {Error}", playResult.Error);
             return BadRequest(playResult.Error);
+        }
+
+        /// <summary>
+        /// Retrieves the 10 most recent game results for the specified user if email is provided, or 10 most recent global game results if email is not provided.
+        /// </summary>
+        /// <param name="email">The email address used to identify the user.</param>
+        /// <returns>A JSON array containing up to 10 of the most recent game results.</returns>
+        /// <response code="200">Returns the list of recent game results for the user if email provided, or global scoreboard.</response>
+        /// <response code="500">Returned if there is an unexpected error accessing the scoreboard data.</response>
+        [HttpGet("scoreboard")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<ScoreEntryDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetScoreboard([FromQuery] string? email = null, CancellationToken ct = default)
+        {
+            var scores = await _scoreboardService.GetRecentEntries(email);
+            return Ok(scores.Select(s => new ScoreEntryDto(s.PlayerEmail, s.PlayerMove, s.ComputerMove, s.Result, s.PlayedAt)));
+        }
+
+        /// <summary>
+        /// Resets the scoreboard for the specified user by deleting all saved game results.
+        /// </summary>
+        /// <param name="email">The email address used to identify the user whose scoreboard should be cleared.</param>
+        /// <returns>A confirmation message indicating the scoreboard has been reset.</returns>
+        /// <response code="200">Indicates the scoreboard was successfully reset.</response>
+        /// <response code="400">Returned if the email is null, empty, or invalid.</response>
+        /// <response code="500">Returned if there is an unexpected error while resetting the scoreboard.</response>
+        [HttpPost("scoreboard/reset")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ResetScoreboard([FromQuery] string email, CancellationToken ct = default)
+        {
+            await _scoreboardService.ResetScoreboardAsync(email);
+            return Ok("Scoreboard reset.");
         }
     }
 }

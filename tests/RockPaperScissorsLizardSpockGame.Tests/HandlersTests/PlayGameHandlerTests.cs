@@ -9,14 +9,16 @@ using RockPaperScissorsLizardSpockGame.Domain.Models;
 public class PlayGameHandlerTests
 {
     private readonly Mock<IRandomNumberService> _mockRandomNumberService;
+    private readonly Mock<IScoreboardService> _mockScoreboardService;
     private readonly Mock<ILogger<PlayGameHandler>> _mockLogger;
     private readonly PlayGameHandler _handler;
 
     public PlayGameHandlerTests()
     {
         _mockRandomNumberService = new Mock<IRandomNumberService>();
+        _mockScoreboardService = new Mock<IScoreboardService>();
         _mockLogger = new Mock<ILogger<PlayGameHandler>>();
-        _handler = new PlayGameHandler(_mockRandomNumberService.Object, _mockLogger.Object);
+        _handler = new PlayGameHandler(_mockRandomNumberService.Object, _mockLogger.Object, _mockScoreboardService.Object);
     }
 
     [Theory]
