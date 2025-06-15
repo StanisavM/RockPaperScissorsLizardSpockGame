@@ -19,13 +19,29 @@ This is a fun and extensible .NET 8 Web API that implements the classic "Rock, P
 
 ## 🔧 Technologies Used
 
-- ASP.NET Core 8
-- MediatR for CQRS pattern
-- LiteDB (local embedded NoSQL database)
-- Swagger (Swashbuckle)
-- xUnit + Moq (unit testing)
-- Docker / Docker Compose
+- **ASP.NET Core 9** – Web API framework
+- **CQRS pattern** (with MediatR)
+- **LiteDB** – Local embedded NoSQL database
+- **Docker / Docker Compose** – Containerization and orchestration
+- **Swagger (Swashbuckle)** – API documentation and UI
 
+---
+
+## 📦 Key NuGet Packages
+
+- **MediatR**: Implements the mediator pattern for in-process messaging and CQRS.
+- **LiteDB**: Lightweight NoSQL database for persisting game results.
+- **Swashbuckle.AspNetCore**: Generates OpenAPI/Swagger documentation and UI.
+- **Serilog.AspNetCore** & **Serilog.Sinks.Console**: Structured logging to console.
+- **Polly**: Resilience and transient-fault-handling (retries, circuit breakers) for HTTP clients.
+- **FluentValidation**: Fluent, expressive validation for configuration and DTOs.
+- **xUnit**: Unit testing framework.
+- **Moq**: Mocking library for unit tests.
+- **coverlet.collector**: Code coverage collection for .NET test projects.
+
+> For a full list of dependencies and their versions, see the `.csproj` files in each project.
+
+---
 ---
 
 ## 🧪 Endpoints Overview

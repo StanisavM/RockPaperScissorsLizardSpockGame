@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RockPaperScissorsLizardSpockGame.Application.Interfaces;
-using RockPaperScissorsLizardSpockGame.Application.Services;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
+using RockPaperScissorsLizardSpockGame.Application.Interfaces;
+using RockPaperScissorsLizardSpockGame.Application.Services;
+using RockPaperScissorsLizardSpockGame.Infrastructure.Configuration;
 
 namespace RockPaperScissorsLizardSpockGame.Infrastructure.Extensions;
 
@@ -13,19 +14,27 @@ public static class InfrastructureExtensions
     // Extension method to register infrastructure-related services into DI container
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        // Read the URL of the external Random Number API from configuration
-        var randomNumberApiUrl = configuration["RandomNumberService:Url"];
+        // Bind AppSettings from configuration
+        var appSettings = new AppSettings();
+        configuration.Bind(appSettings);
 
-        // Throw if the URL is missing or invalid to avoid misconfiguration issues
-        if (string.IsNullOrWhiteSpace(randomNumberApiUrl))
+        // Validate AppSettings using FluentValidation
+        var validator = new AppSettingsValidator();
+        var validationResult = validator.Validate(appSettings);
+        if (!validationResult.IsValid)
         {
-            throw new InvalidOperationException("RandomNumberService URL is not configured properly.");
+            var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
+            throw new InvalidOperationException($"AppSettings validation failed: {errors}");
         }
+
+        // Register configuration sections for DI (optional, for IOptions<T> usage)
+        services.Configure<LiteDbSettings>(configuration.GetSection("LiteDb"));
+        services.Configure<RandomNumberServiceSettings>(configuration.GetSection("RandomNumberService"));
 
         // Register HttpClient for IRandomNumberService with base address set from config
         services.AddHttpClient<IRandomNumberService, RandomNumberService>(client =>
         {
-            client.BaseAddress = new Uri(randomNumberApiUrl);
+            client.BaseAddress = new Uri(appSettings.RandomNumberService.Url);
         })
         // Add resilience policies using Polly to make HTTP calls more robust
         .AddResilienceHandler("randomNumberPolicy", builder =>

@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using Microsoft.Extensions.Options;
 using RockPaperScissorsLizardSpockGame.Application.Interfaces;
 using RockPaperScissorsLizardSpockGame.Domain.Models;
 
@@ -8,13 +9,12 @@ public class LiteDBScoreboardService : IScoreboardService
 {
     // Introduced LiteDB as a lightweight local database to persist game results.
 
-    private const string DbName = "scoreboard.db"; //todo to be moved to config
     private readonly ILiteCollection<ScoreEntry> _collection;
 
-    public LiteDBScoreboardService()
+    public LiteDBScoreboardService(IOptions<LiteDbSettings> settings)
     {
-        var db = new LiteDatabase(DbName);
-        _collection = db.GetCollection<ScoreEntry>("scores");
+        var db = new LiteDatabase(settings.Value.DbName);
+        _collection = db.GetCollection<ScoreEntry>(settings.Value.CollectionName);
         _collection.EnsureIndex(x => x.PlayerEmail);
     }
 
