@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\RockPaperScissorsLizardSpockGame.Application\RockPaperScissorsLizardSpockGame.Application.csproj" />
+    <ProjectReference Include="..\..\src\RockPaperScissorsLizardSpockGame.Infrastructure\RockPaperScissorsLizardSpockGame.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
