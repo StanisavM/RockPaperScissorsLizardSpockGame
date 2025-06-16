@@ -4,6 +4,7 @@ using RockPaperScissorsLizardSpockGame.Application.Commands;
 using RockPaperScissorsLizardSpockGame.Application.Interfaces;
 using RockPaperScissorsLizardSpockGame.Application.Queries;
 using RockPaperScissorsLizardSpockGame.Application.Services;
+using RockPaperScissorsLizardSpockGame.Infrastructure.Configuration;
 using RockPaperScissorsLizardSpockGame.Infrastructure.Extensions;
 using RockPaperScissorsLizardSpockGame.Infrastructure.Services;
 using Serilog;
@@ -21,12 +22,16 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
-    // Replace default logging with Serilog
     builder.Host.UseSerilog();
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddInfrastructure(builder.Configuration);
+
+    var appSettings = new AppSettings();
+    builder.Configuration.GetSection("AppSettings").Bind(appSettings);
+
+    builder.Services.AddConfiguredCors(appSettings!);
     builder.Services.AddSwaggerGen(c =>
     {
         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -59,6 +64,7 @@ try
         app.UseSwaggerUI();
     }
 
+    app.UseCors("AllowSpecificOrigin");
     app.UseHttpsRedirection();
     app.UseMiddleware<ExceptionHandlingMiddleware>();
     app.UseAuthorization();

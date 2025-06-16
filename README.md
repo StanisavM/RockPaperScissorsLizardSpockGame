@@ -1,23 +1,23 @@
-# 🪨📄✂️🦎🖖 Rock Paper Scissors Lizard Spock Game API
+# Rock Paper Scissors Lizard Spock Game API
 
-This is a fun and extensible .NET 8 Web API that implements the classic "Rock, Paper, Scissors, Lizard, Spock" game, inspired by the TV show *The Big Bang Theory*. It's designed with best practices in mind to demonstrate clean architecture, MediatR, testing, and Docker deployment. It also includes a persistent scoreboard using LiteDB to track the 10 most recent game results.
+This is a .NET 9 Web API that implements the classic "Rock, Paper, Scissors, Lizard, Spock" game, inspired by the TV show *The Big Bang Theory*. It's designed with best practices in mind to demonstrate clean architecture, MediatR, testing, and Docker deployment. It also includes a persistent scoreboard using LiteDB to track the 10 most recent game results.
 
 ---
 
-## ✨ Features
+## Features
 
 - Play the RPSLS game with computer opponent.
 - Random number generator service for computer move selection.
 - Persistent scoreboard using LiteDB.
 - View the 10 most recent game results (globally or by user).
-- Reset the scoreboard globally or by user.
+- Reset the scoreboard by user.
 - Dockerized for easy deployment.
 - Swagger UI for testing and documentation.
 - Full unit test suite with xUnit and Moq.
 
 ---
 
-## 🔧 Technologies Used
+## Technologies Used
 
 - **ASP.NET Core 9** – Web API framework
 - **CQRS pattern** (with MediatR)
@@ -27,7 +27,7 @@ This is a fun and extensible .NET 8 Web API that implements the classic "Rock, P
 
 ---
 
-## 📦 Key NuGet Packages
+## Key NuGet Packages
 
 - **MediatR**: Implements the mediator pattern for in-process messaging and CQRS.
 - **LiteDB**: Lightweight NoSQL database for persisting game results.
@@ -44,9 +44,9 @@ This is a fun and extensible .NET 8 Web API that implements the classic "Rock, P
 ---
 ---
 
-## 🧪 Endpoints Overview
+## Endpoints Overview
 
-### 🎮 `/play` `POST`
+### `/play` `POST`
 
 Play a round against the computer.
 
@@ -70,19 +70,19 @@ Play a round against the computer.
 
 ---
 
-### 📜 `/choices` `GET`
+### `/choices` `GET`
 
 Returns the list of all possible moves: Rock, Paper, Scissors, Lizard, Spock.
 
 ---
 
-### 🎲 `/choice` `GET`
+### `/choice` `GET`
 
 Returns a randomly selected move.
 
 ---
 
-### 🏆 `/scoreboard` `GET`
+### `/scoreboard` `GET`
 
 Get the 10 most recent games (optional email filter).
 
@@ -93,7 +93,7 @@ Get the 10 most recent games (optional email filter).
 
 ---
 
-### 🧹 `/scoreboard/clear` `POST`
+### `/scoreboard/clear` `POST`
 
 Clear scoreboard by player email.
 
@@ -106,26 +106,25 @@ Clear scoreboard by player email.
 
 ---
 
-## 🗃️ Project Structure
+## Project Structure
 
 ```
 ├── RockPaperScissorsLizardSpockGame.Api
-│   └── Controllers
+│   └── Controllers / Dockerfile
 ├── RockPaperScissorsLizardSpockGame.Application
 │   ├── Commands / Handlers / Queries / Services / DTOs
 ├── RockPaperScissorsLizardSpockGame.Domain
-│   └── Models (GameMove, GameRules)
+│   └── Models (GameMove, GameRules, ScoreEntry)
 ├── RockPaperScissorsLizardSpockGame.Infrastructure
 │   └── LiteDbScoreboardService.cs
 ├── RockPaperScissorsLizardSpockGame.Tests
 │   └── Unit Tests (xUnit)
 ├── docker-compose.yml
-└── Dockerfile
 ```
 
 ---
 
-## 🚀 Run via Docker
+## Run via Docker
 
 1. Ensure Docker is installed and running.
 2. In the project root, run:
@@ -134,17 +133,17 @@ Clear scoreboard by player email.
 docker-compose up --build
 ```
 
-3. Access the API at: https://localhost:8081/swagger
+3. Access the API at: https://localhost:8081/swagger/index.html
 
 ---
 
-## 💾 Persistent Data
+## Persistent Data
 
 The scoreboard is stored in a `LiteDB` file inside the container and mounted to a volume so data survives restarts.
 
 ---
 
-## 🧪 Running Tests
+## Running Tests
 
 From the test project folder:
 
@@ -154,7 +153,7 @@ dotnet test
 
 ---
 
-## 🎁 Bonus Features
+## Bonus Features
 
 ✔ Scoreboard with 10 most recent results (by user or global) 
 ✔ Scoreboard can be reset per user  
@@ -163,7 +162,7 @@ dotnet test
 
 ---
 
-## 👤 Author
+## Author
 
 **Stanisav Milanovic**  
 [GitHub](https://github.com/stanisavm)
