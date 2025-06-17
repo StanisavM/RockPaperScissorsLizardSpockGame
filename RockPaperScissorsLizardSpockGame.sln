@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{74E0D6C3-DAAD-487D-9F8C-7FD4DA6E3A8C}"
+	ProjectSection(SolutionItems) = preProject
+		tests\RockPaperScissorsLizardSpockGame.Tests\.runsettings = tests\RockPaperScissorsLizardSpockGame.Tests\.runsettings
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockPaperScissorsLizardSpockGame.Api", "src\RockPaperScissorsLizardSpockGame.Api\RockPaperScissorsLizardSpockGame.Api.csproj", "{6C7247E6-9744-F9C5-F503-CEF5DCE84EA4}"
 EndProject

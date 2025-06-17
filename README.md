@@ -93,9 +93,9 @@ Get the 10 most recent games (optional email filter).
 
 ---
 
-### `/scoreboard/clear` `POST`
+### `/scoreboard/reset` `POST`
 
-Clear scoreboard by player email.
+Reset scoreboard by player email.
 
 **Request:**
 ```json
@@ -134,6 +134,7 @@ docker-compose up --build
 ```
 
 3. Access the API at: https://localhost:8081/swagger/index.html
+4. Testing UI where you can copy/paste API Url and try it out: https://codechallenge.boohma.com/
 
 ---
 

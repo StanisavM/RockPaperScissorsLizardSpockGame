@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	<WarningsAsErrors>nullable</WarningsAsErrors>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<PreserveCompilationContext>true</PreserveCompilationContext>
+	<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <UserSecretsId>b30c2e32-4c3a-4b04-8130-99d81e9439d6</UserSecretsId>
 	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	  <DockerfileContext>..\..</DockerfileContext>
