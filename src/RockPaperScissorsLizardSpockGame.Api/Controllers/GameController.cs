@@ -110,6 +110,13 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetScoreboard([FromQuery] string? email = null, CancellationToken ct = default)
         {
+            // TODO: Secure this endpoint with JWT Bearer authentication.
+            // Currently, the `email` is provided via query parameter to identify the user.
+            // Improve this so that:
+            // - This endpoint should require a valid JWT Bearer token.
+            // - The email should be extracted from the token claims (e.g., user identity).
+            // - The authenticated user should only be allowed to fetch their own scoreboard.
+            // - Admin users (based on role/claim in JWT) may be allowed to access any user's scoreboard.
             var scores = await _scoreboardService.GetRecentEntries(email, ct:ct);
             return Ok(scores.Select(s => new ScoreEntryDto(s.PlayerEmail, s.PlayerMove, s.ComputerMove, s.Result, s.PlayedAt)));
         }
@@ -130,6 +137,13 @@ namespace RockPaperScissorsLizardSpockGame.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ResetScoreboard([FromQuery] string email, CancellationToken ct = default)
         {
+            // TODO: Secure this endpoint with JWT Bearer authentication.
+            // Currently, email field is provided in the request body to identify the user.
+            // Improve this so that:
+            // - This endpoint should require a valid JWT Bearer token.
+            // - The email should be extracted from the token claims instead of being passed explicitly.
+            // - The authenticated user should only be allowed to reset their own scoreboard.
+            // - Admin users (based on role/claim in JWT) may be allowed to reset any user's scoreboard.
             await _scoreboardService.ResetScoreboardAsync(email);
             return Ok("Scoreboard reset.");
         }
